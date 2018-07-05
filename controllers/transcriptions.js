@@ -83,10 +83,10 @@ exports.startLiveRec = function (req, res) {
 
 exports.uploadAudio = function (req, res, next) {
 
-    const fileString = req.body.audioStr.replace(`data:audio/wav;base64,`, '');
+    const fileString = req.body.audioStr.replace(`data:audio/webm;codecs=opus;base64,`, '');
     const binaryData = new Buffer(fileString, 'base64').toString('binary');
 
-    const uploadPath = `uploads/audio${new Date().getMilliseconds()}.wav`;
+    const uploadPath = `uploads/audio${new Date().getMilliseconds()}.webm`;
     const interview = new Interview({
         markers: req.body.timeStamps,
         blob_str: uploadPath,
@@ -108,7 +108,11 @@ exports.uploadAudio = function (req, res, next) {
         fs.writeFile(uploadPath, binaryData, 'binary', function (err) {
 
             if (err) {
-                res.send("failed to save");
+                return res.status(500).json({
+                    success: false,
+                    message: "Audio File was not generated due to an internal error",
+                    err: err
+                });
             } else {
                 var transObj = new Transcript({
                     user_id: req.params.user,

@@ -48,6 +48,8 @@ exports.login = function (req, res, next) {
 
 exports.register = function (req, res, next) {
 
+    console.log(req.body.plan_type)
+
 
     if (req.body.email && req.body.password && req.body.name) {
         User.findOne({email: req.body.email}).exec(function (err, user) {
@@ -107,7 +109,7 @@ exports.register = function (req, res, next) {
                                         if (err)
                                             return callback(err, false);
 
-                                        chargeBeeCallback(false, response.customer)
+                                        return chargeBeeCallback(false, response.customer)
                                     })
                                 },
                                 function (customer, chargeBeeCallback) {
@@ -120,7 +122,7 @@ exports.register = function (req, res, next) {
                                         if (err)
                                             return callback(err, false);
 
-                                        chargeBeeCallback(false, result)
+                                        return chargeBeeCallback(false, result)
                                     })
                                 }
                             ], function (err, subscriptionResult) {

@@ -12,4 +12,7 @@ router.post('/fetchLiveRecordingData/:transcriptionsId/:userId/:type', token.val
 router.get('/startLiveRec/:patientId/:userId', token.validateParamToken, transcriptions.startLiveRec);
 router.get('/saveDuration/:transcript/:duration',transcriptions.saveDuration);
 router.get('/getTranscript/:transcript',transcriptions.getTranscript);
+router.put('/interview_title/:InterviewId',transcriptions.updateTitle);
+router.get('/fetchAllInterview/:userId',transcriptions.fetchAllInterview);
+
 module.exports = router;

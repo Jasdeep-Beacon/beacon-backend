@@ -4,6 +4,7 @@ const mongoose          =   require('mongoose')
 /**      Interview Schema
  ---------------------------------*/
 var InterviewSchema = new Schema({
+    title:{type:String, required:true, default:"Untitled Document"},
 
     markers: { type: Array, required: true },
 

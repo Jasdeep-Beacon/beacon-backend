@@ -80,6 +80,50 @@ exports.startLiveRec = function (req, res) {
 
 };
 
+exports.updateTitle = function(req,res){
+
+    if(!req.params.InterviewId){
+        res.jsonp({"err" : "Interview id is required"})
+    } else if( ! req.body.title || !req.body.timeStamps){
+        res.jsonp({"err" : " title or timeStamps empty"})
+    }else {
+        Interview.findOne({_id : req.params.InterviewId}).exec(function(err,data){
+            console.log("asdf",data);
+            if(err){
+               res.jsonp({"err":err}); 
+            }else {
+                if(data){
+                    data.title = req.body.title;
+                    data.markers = req.body.timeStamps;
+                    data.save(function(err,data_save){
+                        if(data_save){
+                            res.jsonp({"message":"data saved"});
+                        }else {
+                            res.jsonp({"message":"data not saved"});
+                        }
+                    });
+                }else {
+                    res.jsonp({"err":"user not found!"})
+                }
+            }
+        })
+    }
+}
+
+exports.fetchAllInterview = function(req,res){
+    if(!req.params.userId) {
+        res.jsonp({"err":"user id is required"})
+    }else {
+        Interview.find({user : req.params.userId}).exec(function(err,fetchdata){
+            console.log("asdf",fetchdata);
+            if(fetchdata.length){
+                res.jsonp(fetchdata);
+            }else {
+                res.jsonp({"err":"data not available"})
+            }
+        })
+    }
+}
 
 exports.uploadAudio = function (req, res, next) {
 

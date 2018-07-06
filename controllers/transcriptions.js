@@ -114,7 +114,7 @@ exports.fetchAllInterview = function(req,res){
     if(!req.params.userId) {
         res.jsonp({"err":"user id is required"})
     }else {
-        Interview.find({user : req.params.userId}).exec(function(err,fetchdata){
+        Interview.find({user : req.params.userId}).sort({created_at: -1}).exec(function(err,fetchdata){
             console.log("asdf",fetchdata);
             if(fetchdata.length){
                 res.jsonp(fetchdata);

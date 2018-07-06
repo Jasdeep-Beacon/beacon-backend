@@ -25,5 +25,8 @@
     "util": "^0.10.3",
     "vcap_services": "^0.3.4",
     "watson-developer-cloud": "^2.39.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   }
 }

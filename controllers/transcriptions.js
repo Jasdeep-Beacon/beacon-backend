@@ -88,7 +88,7 @@ exports.updateTitle = function(req,res){
         res.jsonp({"err" : " title or timeStamps empty"})
     }else {
         Interview.findOne({_id : req.params.InterviewId}).exec(function(err,data){
-            console.log("asdf",data);
+            //console.log("asdf",data);
             if(err){
                res.jsonp({"err":err}); 
             }else {
@@ -97,9 +97,9 @@ exports.updateTitle = function(req,res){
                     data.markers = req.body.timeStamps;
                     data.save(function(err,data_save){
                         if(data_save){
-                            res.jsonp({"message":"data saved"});
+                            res.jsonp({"success": true, "message":"data saved"});
                         }else {
-                            res.jsonp({"message":"data not saved"});
+                            res.jsonp({"success": false, "message":"data not saved"});
                         }
                     });
                 }else {

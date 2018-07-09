@@ -48,15 +48,12 @@ exports.login = function (req, res, next) {
 
 exports.register = function (req, res, next) {
 
-    console.log(req.body.plan_type)
-
-
     if (req.body.email && req.body.password && req.body.name) {
         User.findOne({email: req.body.email}).exec(function (err, user) {
             if (err) {
                 res.status(401).jsonp({"msg": err});
             } else {
-                if (user) {
+                if (user) {                     
                     return res.status(401).jsonp({success: false, message: "This user is already exist"});
                 } else {
 
@@ -137,19 +134,24 @@ exports.register = function (req, res, next) {
                         function (user, subscription, callback) {
 
                             // saving the subscription data into the subscription folder
-                            userSubscription = new UserSubscription({
+                            if(subscription && subscription.customer){
+                                userSubscription = new UserSubscription({
                                 user_id: user._id,
                                 chargebee_customer_id: subscription.customer.id,
                                 chargebee_subscription_id: subscription.subscription.id,
                                 chargebee_invoice_id: subscription.invoice.id
                             });
 
-                            userSubscription.save(function (err, subscribed) {
-                                if (err)
-                                    return callback(err, false);
+                                userSubscription.save(function (err, subscribed) {
+                                    if (err)
+                                        return callback(err, false);
 
-                                return callback(null, user);
-                            })
+                                    return callback(null, user);
+                                });
+                            } else{
+                                return callback("Error!", false);
+                            }
+                           
 
                         }
                     ], function (err, result) {
@@ -157,9 +159,9 @@ exports.register = function (req, res, next) {
                         console.log(err)
 
                         if (err) {
+                            User.remove({ email: req.body.email }).exec(function (err, res) { });
                             return res.status(500).jsonp({ success: false, message: "There is an internal server error", err: err });
                         }
-
                         return res.status(200).jsonp({ success: true, message: "User has been registered successfully", data: result });
                     });
 

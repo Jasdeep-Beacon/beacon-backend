@@ -14,37 +14,37 @@ exports.getToken = function(req, res, next){
 	user.email=req.user.email;
 	user.image = req.user.image;
 	user._id=req.user._id;
-	res.status(200).jsonp({success: true, data: user, messsage: "User has been authenticated successfully"});
+	res.status(200).jsonp({success: true, data: user, message: "User has been authenticated successfully"});
 }
 
-exports.getUser = function(req, res, next){	
+exports.getUser = function(req, res, next){	 
 	if(req.headers.authorization){
-		var token = req.headers.authorization.substr(7)
+		var token = req.headers.authorization
 		jwt.verify(token, encKey, function(err, decoded) {
 			if(err){
-				res.status(401).jsonp({"msg":err});
+				res.status(401).jsonp({success: false, "message":err.message});
 			}else{
-				res.status(200).jsonp({"data":decoded["_doc"]});
+				res.status(200).jsonp({success: true, "data": decoded["_doc"]});
 			}  
 		});
 	}else{
-		res.status(401).jsonp({"msg":"Token is required"});
+		res.status(401).jsonp({success: false, "message": "Token is required"});
 	}	
 }
 
-exports.validateToken = function(req, res, next){	
+exports.validateToken = function(req, res, next){	 
 	if(req.headers.authorization){
-		var token = req.headers.authorization.substr(7)
+		var token = req.headers.authorization
 		jwt.verify(token, encKey, function(err, decoded) {
 			if(err){
-				res.status(401).jsonp({"msg":err});
+				res.status(401).jsonp({success: false, "message": err.message});
 			}else{
 				req.user=decoded["_doc"];
 				next();
 			}  
 		});
 	}else{
-		res.status(401).jsonp({"msg":"Token is required"});
+		res.status(401).jsonp({success: false, "message": "Token is required"});
 	}	
 }
 
@@ -73,6 +73,21 @@ exports.validateParamToken = function(req, res, next){
 			}  
 		});
 	}else{
-		res.status(401).jsonp({"msg":"Token is required"});
+		res.status(401).jsonp({success: false,"message":"Token is required"});
 	}	
+}
+
+exports.expireToken = function(req, res, next){ 
+	if(req.headers.authorization){
+		let token = jwt.sign({
+	  		exp: Math.floor(Date.now() / 1000)
+		}, encKey);
+		res.status(200).jsonp({success: true, "data": token});
+	} else{
+		res.status(401).jsonp({success: false, "message": "Token is required"});
+	}
+}
+
+exports.getMessage =  function(params) {
+	 return ({success: false, message: 'Missing params:- ' + params.join(', ')});
 }

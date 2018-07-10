@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const parameters = require('parameters-middleware');
 const user = require('../controllers/users');
 const token = require('../controllers/accessTokens');
 
 
+router.post('/login', 
+	parameters({body:['email','password']}, {message:token.getMessage}), 
+	user.login, token.getToken
+);
 
-router.post('/login', user.login, token.getToken);
-
-router.post('/register', user.register);
+router.post('/register', 
+	parameters({body:['email','password', 'name']}, {message:token.getMessage}),
+	user.register
+);
 
 router.get('/getMe',token.validateToken, token.getUser);
 
@@ -21,4 +27,7 @@ router.post('/update/:userId',token.validateToken, user.updateUser);
 
 router.delete('/delete/:userId',token.validateToken, user.delete);
 
+router.delete('/logout/',token.expireToken);
+
 module.exports = router;
+

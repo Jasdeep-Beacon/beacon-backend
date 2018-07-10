@@ -20,7 +20,6 @@ const http = require('http');
 // var ca = fs.readFileSync('./certs/gd_bundle-g2-g1.crt');
 // var httpsOptions = {key: privateKey, cert: certificate, ca: ca};
 
-
 const server = http.createServer(app);
 // var server = http.createServer(httpsOptions,app);
 
@@ -37,7 +36,7 @@ const encKey = 'shhhhh';
 const transcriptions = require('./routes/transcriptions');
 const recommendations = require('./routes/recommendations');
 const users = require('./routes/users');
-const patient = require('./routes/patient');
+//const patient = require('./routes/patient');
 //var app = express();
 
 // Bootstrap models
@@ -104,7 +103,6 @@ const callSocket = function (req, res, next) {
 app.use('/user', users);
 app.use('/recommendations', recommendations);
 app.use('/transcriptions', callSocket, transcriptions);
-app.use('/patient', patient);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     const err = new Error('Not Found');

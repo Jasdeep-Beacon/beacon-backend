@@ -4,7 +4,7 @@ var token = require('../controllers/accessTokens')
 var transcriptions = require('../controllers/transcriptions')
 /* GET home page. */
 router.post('/upload/:userId', token.validateParamToken, transcriptions.uploadFile);
-router.post('/uploadInterview/:user',transcriptions.uploadAudio);
+router.post('/uploadInterview/:user',token.validateToken, transcriptions.uploadAudio);
 router.get('/getInterview/:interview',transcriptions.fetchAudio);
 //router.post('//:userId', token.validateParamToken, transcriptions.uploadFile);
 router.post('/fetchLiveRecordingData/:transcriptionsId/:userId', token.validateParamToken, transcriptions.fetchLiveRecordingData);
@@ -12,7 +12,7 @@ router.post('/fetchLiveRecordingData/:transcriptionsId/:userId/:type', token.val
 router.get('/startLiveRec/:patientId/:userId', token.validateParamToken, transcriptions.startLiveRec);
 router.get('/saveDuration/:transcript/:duration',transcriptions.saveDuration);
 router.get('/getTranscript/:transcript',transcriptions.getTranscript);
-router.put('/interview_title/:InterviewId',transcriptions.updateTitle);
+router.put('/interview_title/:InterviewId', token.validateToken, transcriptions.updateTitle);
 router.get('/fetchAllInterview/:userId',transcriptions.fetchAllInterview);
 
 module.exports = router;

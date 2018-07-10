@@ -160,7 +160,7 @@ exports.register = function (req, res, next) {
 
                         if (err) {
                             User.remove({ email: req.body.email }).exec(function (err, res) { });
-                            return res.status(500).jsonp({ success: false, message: "There is an internal server error", err: err });
+                            return res.status(500).jsonp({ success: false, message: "There is an internal server error! Please try again with valid values.", err: err });
                         }
                         return res.status(200).jsonp({ success: true, message: "User has been registered successfully", data: result });
                     });

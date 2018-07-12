@@ -8,9 +8,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const debug = require('debug')('signora:server');
-
+const { ENV } = require('./config');
+// var dotenv = require('dotenv');
+// dotenv.load();
+// console.log(process.env.DB_HOST);
 //var port = normalizePort(process.env.PORT || '4101');
-const port = normalizePort('4101');
+const port = normalizePort(ENV.PORT);
 const app = express();
 // var http = require('https');
 const http = require('http');
@@ -58,7 +61,7 @@ const walk = function (path) {
 walk(models_path);
 
 // mongoose.connect('mongodb://localhost/beacon', {useMongoClient: true});
-mongoose.connect('mongodb://beacon-user:abc123@ds121871.mlab.com:21871/beacon', {useMongoClient: true});
+mongoose.connect(`mongodb://${ENV.DB_USER}:${ENV.DB_PASS}@${ENV.DB_HOST}/${ENV.DB_NAME}`, {useMongoClient: true});
 
 mongoose.Promise = global.Promise;
 process.on('unhandledRejection', up => {
@@ -111,18 +114,17 @@ app.use(function (req, res, next) {
 });
 
 
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res, next) { 
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    res.json({status:err.status || 500, error:'Page not found!'});
 });
 
 app.set('port', port);
-
 
 server.listen(port);
 server.on('error', onError);

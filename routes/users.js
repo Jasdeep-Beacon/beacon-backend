@@ -5,8 +5,7 @@ const user = require('../controllers/users');
 const token = require('../controllers/accessTokens');
 
 
-router.post('/login', 
-	parameters({body:['email','password']}, {message:token.getMessage}), 
+router.post('/login',  
 	user.login, token.getToken
 );
 

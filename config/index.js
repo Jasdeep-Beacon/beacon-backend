@@ -6,7 +6,7 @@
  */
 
 exports.ENV = {
-  PORT: `4190`,
+  PORT: `4101`,
   DB_HOST: `52.34.207.5:27017`,
   DB_USER: `audiosynthesizer`,
   DB_PASS: `audiosynthesizer2780`,
